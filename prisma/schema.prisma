@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EXPERT
+}
+
+enum AktionStatus {
+  AKTIV
+  ABGESAGT
+  GEAENDERT
+}
+
+enum EmailTyp {
+  BESTAETIGUNG
+  AENDERUNG
+  ABSAGE
+  TAEGLICHE_UEBERSICHT
+  ABMELDUNG
+  ERINNERUNG
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String
+  role      Role       @default(EXPERT)
+  active    Boolean    @default(true)
+  teams     UserTeam[]
+  aktionen  Aktion[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("users")
+}
+
+model Team {
+  id          String            @id @default(cuid())
+  name        String
+  wahlkreisId String?
+  wahlkreis   Wahlkreis?        @relation(fields: [wahlkreisId], references: [id])
+  members     UserTeam[]
+  aktionen    Aktion[]
+  statistiken AktionStatistik[]
+  createdAt   DateTime          @default(now())
+
+  @@map("teams")
+}
+
+model UserTeam {
+  userId String
+  teamId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId])
+  @@map("user_teams")
+}
+
+model Wahlkreis {
+  id          String            @id @default(cuid())
+  nummer      Int               @unique
+  name        String
+  teams       Team[]
+  aktionen    Aktion[]
+  statistiken AktionStatistik[]
+  createdAt   DateTime          @default(now())
+
+  @@map("wahlkreise")
+}
+
+model Aktion {
+  id                    String       @id @default(cuid())
+  titel                 String
+  beschreibung          String?
+  datum                 DateTime     @db.Date
+  startzeit             String
+  endzeit               String
+  adresse               String
+  latitude              Float?
+  longitude             Float?
+  wahlkreisId           String
+  wahlkreis             Wahlkreis    @relation(fields: [wahlkreisId], references: [id])
+  ansprechpersonName    String
+  ansprechpersonEmail   String
+  ansprechpersonTelefon String
+  maxTeilnehmer         Int?
+  status                AktionStatus @default(AKTIV)
+  createdById           String
+  createdBy             User         @relation(fields: [createdById], references: [id])
+  teamId                String?
+  team                  Team?        @relation(fields: [teamId], references: [id])
+  anmeldungen           Anmeldung[]
+  emailLogs             EmailLog[]
+  statistik             AktionStatistik?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  @@map("aktionen")
+}
+
+model Anmeldung {
+  id         String   @id @default(cuid())
+  aktionId   String
+  aktion     Aktion   @relation(fields: [aktionId], references: [id], onDelete: Cascade)
+  vorname    String
+  nachname   String
+  email      String
+  telefon    String?
+  signalName  String?
+  cancelToken String?  @unique
+  createdAt   DateTime @default(now())
+
+  @@unique([aktionId, email])
+  @@map("anmeldungen")
+}
+
+model EmailLog {
+  id              String   @id @default(cuid())
+  typ             EmailTyp
+  empfaengerEmail String
+  aktionId        String?
+  aktion          Aktion?  @relation(fields: [aktionId], references: [id], onDelete: SetNull)
+  gesendetAm      DateTime @default(now())
+  status          String
+
+  @@map("email_logs")
+}
+
+model AktionStatistik {
+  id               String    @id @default(cuid())
+  aktionId         String    @unique
+  aktion           Aktion    @relation(fields: [aktionId], references: [id], onDelete: Restrict)
+  anmeldungenCount Int
+  aktionDatum      DateTime  @db.Date
+  wahlkreisId      String
+  wahlkreis        Wahlkreis @relation(fields: [wahlkreisId], references: [id])
+  teamId           String?
+  team             Team?     @relation(fields: [teamId], references: [id])
+  geloeschtAm      DateTime  @default(now())
+
+  @@map("aktion_statistiken")
+}

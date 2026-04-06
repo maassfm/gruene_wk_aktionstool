@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anleitung für Wahlkampfexperten – Aktionskoordination</title>
+  <style>
+    /* ============================================================
+       FONTS
+       ============================================================ */
+    @font-face {
+      font-family: "DM Sans";
+      src: url("../public/fonts/DMSans-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "DM Sans";
+      src: url("../public/fonts/DMSans-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "GrueneType Neue";
+      src: url("../public/fonts/GrueneTypeNeue-Regular.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
+    :root {
+      --tanne: #005538;
+      --tanne-light: #006644;
+      --klee: #008939;
+      --grashalm: #8ABD24;
+      --sonne: #FFF17A;
+      --himmel: #0BA1DD;
+      --signal: #E6007E;
+      --sand: #F5F1E9;
+      --sand-dark: #E8E2D6;
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-100: #F7F7F7;
+      --gray-200: #E5E5E5;
+      --gray-300: #D4D4D4;
+      --gray-500: #737373;
+      --gray-700: #404040;
+
+      --font-sans: "DM Sans", Arial, Helvetica, sans-serif;
+      --font-headline: "GrueneType Neue", "Barlow Condensed", "Arial Narrow", sans-serif;
+
+      --border: 2px solid var(--black);
+      --shadow: 4px 4px 0 var(--black);
+      --shadow-lg: 6px 6px 0 var(--black);
+    }
+
+    /* ============================================================
+       PRINT PAGE SETUP
+       ============================================================ */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 9.5pt;
+      line-height: 1.55;
+      color: var(--black);
+      background: var(--gray-200);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @media print {
+      body {
+        background: var(--white);
+      }
+    }
+
+    /* ============================================================
+       PAGE CONTAINER
+       ============================================================ */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 14mm 16mm 14mm 16mm;
+      margin: 8mm auto;
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      page-break-after: always;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media print {
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+    }
+
+    /* ============================================================
+       COVER PAGE
+       ============================================================ */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      min-height: 297mm;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .cover-header {
+      background: var(--tanne);
+      padding: 10mm 16mm 8mm 16mm;
+      border-bottom: 3px solid var(--black);
+      position: relative;
+    }
+
+    .cover-header .org-label {
+      font-family: var(--font-sans);
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--grashalm);
+      margin-bottom: 4mm;
+    }
+
+    .cover-header .doc-type {
+      font-family: var(--font-headline);
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2mm;
+    }
+
+    .cover-title {
+      font-family: var(--font-headline);
+      font-size: 32pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 5mm;
+    }
+
+    .cover-subtitle {
+      font-family: var(--font-sans);
+      font-size: 10pt;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.5;
+    }
+
+    /* decorative stripe block */
+    .cover-stripe {
+      display: flex;
+      height: 5mm;
+      margin: 0;
+    }
+
+    .cover-stripe span {
+      flex: 1;
+      display: block;
+    }
+
+    .cover-stripe span:nth-child(1) {
+      background: var(--klee);
+    }
+
+    .cover-stripe span:nth-child(2) {
+      background: var(--grashalm);
+    }
+
+    .cover-stripe span:nth-child(3) {
+      background: var(--sonne);
+    }
+
+    .cover-stripe span:nth-child(4) {
+      background: var(--himmel);
+    }
+
+    .cover-stripe span:nth-child(5) {
+      background: var(--signal);
+    }
+
+    .cover-body {
+      flex: 1;
+      padding: 10mm 16mm;
+      background: var(--white);
+    }
+
+    .cover-toc-title {
+      font-family: var(--font-headline);
+      font-size: 16pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tanne);
+      margin-bottom: 5mm;
+      padding-bottom: 2mm;
+      border-bottom: var(--border);
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      padding: 1.5mm 0;
+      border-bottom: 1px solid var(--sand-dark);
+      font-size: 9pt;
+      break-inside: avoid;
+    }
+
+    .toc-list li:last-child {
+      border-bottom: none;
+    }
+
+    .toc-num {
+      font-family: var(--font-headline);
+      font-size: 10pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--tanne);
+      min-width: 8mm;
+      flex-shrink: 0;
+    }
+
+    .toc-text {
+      flex: 1;
+      color: var(--black);
+      font-weight: 400;
+      font-size: 10pt;
+    }
+
+    .toc-dots {
+      flex: 1;
+      border-bottom: 1.5px dotted var(--gray-300);
+      margin: 0 2mm;
+      margin-bottom: 1.5pt;
+    }
+
+    .toc-page {
+      font-family: var(--font-headline);
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--gray-500);
+      min-width: 6mm;
+      text-align: right;
+    }
+
+    .cover-footer {
+      padding: 5mm 16mm;
+      background: var(--white);
+      border-top: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-footer-text {
+      font-size: 7.5pt;
+      color: var(--gray-500);
+    }
+
+    .cover-footer-badge {
+      background: var(--tanne);
+      color: var(--white);
+      font-family: var(--font-headline);
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 1.5mm 3mm;
+      border: var(--border);
+      box-shadow: 2px 2px 0 var(--black);
+    }
+
+    /* ============================================================
+       CONTENT PAGES
+       ============================================================ */
+    .content-page {
+      padding: 12mm 16mm 10mm 16mm;
+    }
+
+    /* Running header per page */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 3mm;
+      margin-bottom: 6mm;
+      border-bottom: var(--border);
+    }
+
+    .page-header-title {
+      font-family: var(--font-headline);
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--tanne);
+    }
+
+    .page-header-num {
+      font-family: var(--font-headline);
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-500);
+    }
+
+    /* Page footer */
+    .page-footer {
+      position: absolute;
+      bottom: 8mm;
+      left: 16mm;
+      right: 16mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 3mm;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .page-footer-text {
+      font-size: 7pt;
+      color: var(--gray-400, #a3a3a3);
+    }
+
+    .page-footer-num {
+      font-family: var(--font-headline);
+      font-size: 8pt;
+      font-weight: 700;
+      color: var(--tanne);
+    }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    h2 {
+      font-family: var(--font-headline);
+      font-size: 16pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--tanne);
+      margin-top: 7mm;
+      margin-bottom: 3mm;
+      line-height: 1.1;
+      break-after: avoid;
+    }
+
+    /* Section heading with accent bar */
+    h2.section-heading {
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+    }
+
+    h2.section-heading::before {
+      content: "";
+      display: inline-block;
+      width: 4mm;
+      height: 100%;
+      min-height: 10mm;
+      background: var(--grashalm);
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    h3 {
+      font-family: var(--font-headline);
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--black);
+      margin-top: 5mm;
+      margin-bottom: 2.5mm;
+      break-after: avoid;
+    }
+
+    h4 {
+      font-family: var(--font-sans);
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-700);
+      margin-top: 4mm;
+      margin-bottom: 1.5mm;
+      break-after: avoid;
+    }
+
+    p {
+      font-size: 10pt;
+      line-height: 1.58;
+      color: var(--black);
+      margin-bottom: 2.5mm;
+      widows: 3;
+      orphans: 3;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    code {
+      font-family: "Courier New", monospace;
+      font-size: 10pt;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      padding: 0 1mm;
+    }
+
+    /* ============================================================
+       STEP BLOCKS (numbered steps)
+       ============================================================ */
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 3mm;
+    }
+
+    .steps li {
+      display: flex;
+      gap: 3mm;
+      align-items: flex-start;
+      margin-bottom: 2mm;
+      break-inside: avoid;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 6mm;
+      height: 6mm;
+      background: var(--tanne);
+      color: var(--white);
+      font-family: var(--font-headline);
+      font-size: 7.5pt;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--black);
+      box-shadow: 1.5px 1.5px 0 var(--black);
+      margin-top: 0.5mm;
+    }
+
+    .step-text {
+      flex: 1;
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       BULLET LISTS
+       ============================================================ */
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 3mm;
+    }
+
+    .bullet-list li {
+      display: flex;
+      gap: 2.5mm;
+      align-items: flex-start;
+      margin-bottom: 1.5mm;
+      font-size: 10pt;
+      line-height: 1.5;
+      break-inside: avoid;
+    }
+
+    .bullet-list li::before {
+      content: "▸";
+      color: var(--tanne);
+      font-size: 8pt;
+      flex-shrink: 0;
+      margin-top: 0.5pt;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       TABLES
+       ============================================================ */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 4mm;
+      font-size: 10pt;
+      break-inside: avoid;
+    }
+
+    .data-table thead tr {
+      background: var(--tanne);
+      color: var(--white);
+    }
+
+    .data-table thead th {
+      font-family: var(--font-headline);
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2mm 2.5mm;
+      text-align: left;
+      border: 1.5px solid var(--black);
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: var(--sand);
+    }
+
+    .data-table tbody tr:nth-child(odd) {
+      background: var(--white);
+    }
+
+    .data-table tbody td {
+      padding: 1.8mm 2.5mm;
+      border: 1px solid var(--gray-300);
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    .data-table tbody td strong {
+      font-weight: 700;
+    }
+
+    /* Required marker in tables */
+    .req-yes {
+      display: inline-block;
+      background: var(--tanne);
+      color: var(--white);
+      font-family: var(--font-headline);
+      font-size: 6.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.5mm 1.5mm;
+      border: 1px solid var(--black);
+      letter-spacing: 0.05em;
+    }
+
+    .req-cond {
+      display: inline-block;
+      background: var(--sonne);
+      color: var(--black);
+      font-family: var(--font-headline);
+      font-size: 6.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.5mm 1.5mm;
+      border: 1px solid var(--black);
+      letter-spacing: 0.05em;
+    }
+
+    .req-no {
+      display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      font-family: var(--font-headline);
+      font-size: 6.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.5mm 1.5mm;
+      border: 1px solid var(--gray-300);
+      letter-spacing: 0.05em;
+    }
+
+    /* ============================================================
+       INFO BOX / TIP BOX
+       ============================================================ */
+    .info-box {
+      background: var(--sand);
+      border: var(--border);
+      border-left: 5px solid var(--tanne);
+      box-shadow: var(--shadow);
+      padding: 3mm 4mm;
+      margin: 3mm 0 4mm 0;
+      break-inside: avoid;
+    }
+
+    .info-box .info-label {
+      font-family: var(--font-headline);
+      font-size: 9t;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--tanne);
+      margin-bottom: 1.5mm;
+    }
+
+    .info-box p {
+      font-size: 10pt;
+      margin: 0;
+      color: var(--black);
+    }
+
+    .warning-box {
+      background: var(--sonne);
+      border: var(--border);
+      border-left: 5px solid var(--black);
+      box-shadow: var(--shadow);
+      padding: 3mm 4mm;
+      margin: 3mm 0 4mm 0;
+      break-inside: avoid;
+    }
+
+    .warning-box .info-label {
+      font-family: var(--font-headline);
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      margin-bottom: 1.5mm;
+    }
+
+    .warning-box p {
+      font-size: 10pt;
+      margin: 0;
+      color: var(--black);
+    }
+
+    .danger-box {
+      background: #fde8f3;
+      border: var(--border);
+      border-left: 5px solid var(--signal);
+      box-shadow: var(--shadow);
+      padding: 3mm 4mm;
+      margin: 3mm 0 4mm 0;
+      break-inside: avoid;
+    }
+
+    .danger-box .info-label {
+      font-family: var(--font-headline);
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--signal);
+      margin-bottom: 1.5mm;
+    }
+
+    .danger-box p {
+      font-size: 10pt;
+      margin: 0;
+      color: var(--black);
+    }
+
+    /* ============================================================
+       EMAIL TRIGGER TABLE (special layout)
+       ============================================================ */
+    .email-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 3mm;
+      font-size: 8.5pt;
+      break-inside: avoid;
+    }
+
+    .email-table thead tr {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .email-table thead th {
+      font-family: var(--font-headline);
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2mm 2.5mm;
+      text-align: left;
+      border: 1.5px solid var(--black);
+    }
+
+    .email-table tbody tr:nth-child(even) {
+      background: var(--gray-100);
+    }
+
+    .email-table tbody tr:nth-child(odd) {
+      background: var(--white);
+    }
+
+    .email-table tbody td {
+      padding: 2mm 2.5mm;
+      border: 1px solid var(--gray-300);
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    /* ============================================================
+       SECTION DIVIDER
+       ============================================================ */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+      margin: 5mm 0 4mm 0;
+    }
+
+    .section-divider-line {
+      flex: 1;
+      height: 2px;
+      background: var(--black);
+    }
+
+    .section-divider-num {
+      font-family: var(--font-headline);
+      font-size: 22pt;
+      font-weight: 700;
+      color: var(--tanne);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    /* ============================================================
+       BADGE INLINE
+       ============================================================ */
+    .badge {
+      display: inline-block;
+      font-family: var(--font-headline);
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.5mm 2mm;
+      border: 1px solid var(--black);
+    }
+
+    .badge-aktiv {
+      background: var(--tanne);
+      color: var(--white);
+    }
+
+    .badge-changed {
+      background: var(--sonne);
+      color: var(--black);
+    }
+
+    .badge-absage {
+      background: var(--signal);
+      color: var(--white);
+    }
+
+    /* ============================================================
+       STATUS INDICATORS
+       ============================================================ */
+    .status-row {
+      display: flex;
+      gap: 4mm;
+      flex-wrap: wrap;
+      margin-bottom: 3mm;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 2mm;
+      font-size: 8.5pt;
+    }
+
+    .status-dot {
+      width: 3mm;
+      height: 3mm;
+      border: 1px solid var(--black);
+      flex-shrink: 0;
+    }
+
+    .dot-green {
+      background: var(--klee);
+    }
+
+    .dot-red {
+      background: var(--signal);
+    }
+
+    /* ============================================================
+       EXPORT CARDS
+       ============================================================ */
+    .export-grid {
+      display: flex;
+      gap: 4mm;
+      margin-bottom: 3mm;
+    }
+
+    .export-card {
+      flex: 1;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 3mm;
+      background: var(--white);
+      break-inside: avoid;
+    }
+
+    .export-card-title {
+      font-family: var(--font-headline);
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tanne);
+      margin-bottom: 2mm;
+      padding-bottom: 1.5mm;
+      border-bottom: var(--border);
+    }
+
+    .export-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .export-card ul li {
+      font-size: 8.5pt;
+      line-height: 1.5;
+      padding: 0.5mm 0;
+      padding-left: 2.5mm;
+      position: relative;
+      color: var(--black);
+    }
+
+    .export-card ul li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: var(--tanne);
+      font-weight: 700;
+    }
+
+    .export-use {
+      margin-top: 2mm;
+      padding-top: 2mm;
+      border-top: 1px solid var(--gray-200);
+      font-size: 8pt;
+      color: var(--gray-700);
+    }
+
+    .export-use strong {
+      font-weight: 700;
+      color: var(--tanne);
+      text-transform: uppercase;
+      font-size: 7pt;
+      letter-spacing: 0.05em;
+    }
+
+    /* ============================================================
+       FAQ ACCORDION (static)
+       ============================================================ */
+    .faq-item {
+      border: var(--border);
+      margin-bottom: 2.5mm;
+      break-inside: avoid;
+    }
+
+    .faq-q {
+      background: var(--tanne);
+      color: var(--white);
+      padding: 2mm 3mm;
+      font-family: var(--font-sans);
+      font-size: 9pt;
+      font-weight: 700;
+      display: flex;
+      align-items: flex-start;
+      gap: 2mm;
+    }
+
+    .faq-q-mark {
+      font-family: var(--font-headline);
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--grashalm);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      padding: 2.5mm 3mm;
+      font-size: 9pt;
+      line-height: 1.5;
+      background: var(--sand);
+    }
+
+    .faq-a p {
+      margin: 0;
+    }
+
+    /* ============================================================
+       UTILITY
+       ============================================================ */
+    .spacer {
+      height: 3mm;
+    }
+
+    .spacer-lg {
+      height: 6mm;
+    }
+
+    .mt-sm {
+      margin-top: 2mm;
+    }
+
+    .mt-md {
+      margin-top: 4mm;
+    }
+
+    .mb-sm {
+      margin-bottom: 2mm;
+    }
+
+    .mb-md {
+      margin-bottom: 4mm;
+    }
+
+    /* ============================================================
+       CREDENTIAL FIELDS (cover page)
+       ============================================================ */
+    .credentials-block {
+      margin-top: 5mm;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--white);
+    }
+
+    .credentials-block-title {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-headline);
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1.5mm 3mm;
+    }
+
+    .credentials-fields {
+      display: flex;
+      gap: 0;
+    }
+
+    .credential-field {
+      flex: 1;
+      padding: 3mm 3mm 2mm 3mm;
+      border-right: var(--border);
+    }
+
+    .credential-field:last-child {
+      border-right: none;
+    }
+
+    .credential-label {
+      font-family: var(--font-headline);
+      font-size: 6.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--tanne);
+      margin-bottom: 1.5mm;
+    }
+
+    .credential-line {
+      width: 100%;
+      height: 7mm;
+      border-bottom: 2px solid var(--black);
+      background: var(--sand);
+      display: block;
+      font-weight: 700;
+      font-size: 9.5pt;
+      text-align: center;
+      font-family: var(--font-sans);
+      line-height: 7mm;
+    }
+
+    /* screen-only grey background */
+    @media screen {
+      html {
+        background: #c8c8c8;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================================
+     SEITE 1: COVER
+     ================================================================ -->
+  <div class="page cover">
+    <div class="cover-header">
+      <div class="org-label">KREISVORSTAND · BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte</div>
+      <div class="doc-type">Anleitung · Wahlkampfexperten</div>
+      <div class="cover-title">Aktions&shy;koordination</div>
+      <div class="cover-subtitle">
+        Alles, was du wissen musst, um Wahlkampfaktionen<br>
+        zu erstellen und zu verwalten.
+      </div>
+    </div>
+
+    <!-- <div class="cover-stripe">
+      <span></span> <span></span><span></span><span></span><span></span>
+    </div> -->
+
+    <div class="cover-body">
+      <div class="cover-toc-title">Inhalt</div>
+      <ol class="toc-list">
+        <li>
+          <span class="toc-num">1</span>
+          <span class="toc-text">Was ist die App?</span>
+          <span class="toc-page">2</span>
+        </li>
+        <li>
+          <span class="toc-num">2</span>
+          <span class="toc-text">Anmelden (Login)</span>
+          <span class="toc-page">2</span>
+        </li>
+        <li>
+          <span class="toc-num">3</span>
+          <span class="toc-text">Dashboard-Übersicht</span>
+          <span class="toc-page">3</span>
+        </li>
+        <li>
+          <span class="toc-num">4</span>
+          <span class="toc-text">Neue Aktion anlegen</span>
+          <span class="toc-page">4</span>
+        </li>
+        <li>
+          <span class="toc-num">4.1</span>
+          <span class="toc-text">Manuell anlegen</span>
+          <span class="toc-page">4</span>
+        </li>
+        <li>
+          <span class="toc-num">4.2</span>
+          <span class="toc-text">Per Excel importieren</span>
+          <span class="toc-page">5</span>
+        </li>
+        <li>
+          <span class="toc-num">5</span>
+          <span class="toc-text">Aktion bearbeiten</span>
+          <span class="toc-page">5</span>
+        </li>
+        <li>
+          <span class="toc-num">6</span>
+          <span class="toc-text">Aktion absagen oder löschen</span>
+          <span class="toc-page">6</span>
+        </li>
+        <li>
+          <span class="toc-num">7</span>
+          <span class="toc-text">Anmeldungen einsehen</span>
+          <span class="toc-page">6</span>
+        </li>
+        <li>
+          <span class="toc-num">8</span>
+          <span class="toc-text">Anmeldungen exportieren</span>
+          <span class="toc-page">6</span>
+        </li>
+        <li>
+          <span class="toc-num">9</span>
+          <span class="toc-text">Öffentliche Aktionsseite</span>
+          <span class="toc-page">7</span>
+        </li>
+        <li>
+          <span class="toc-num">10</span>
+          <span class="toc-text">Automatische E-Mails</span>
+          <span class="toc-page">7</span>
+        </li>
+        <li>
+          <span class="toc-num">11</span>
+          <span class="toc-text">Häufige Fragen</span>
+          <span class="toc-page">8</span>
+        </li>
+      </ol>
+      <div class="credentials-block">
+        <div class="credentials-block-title">Deine Zugangsdaten</div>
+        <div class="credentials-fields">
+          <div class="credential-field">
+            <div class="credential-label">E-Mail-Adresse</div>
+            <span class="credential-line">[EMAIL_ADDRESS]</span>
+          </div>
+          <div class="credential-field">
+            <div class="credential-label">Passwort</div>
+            <span class="credential-line">PASSWORT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-text">Bei Fragen wende Dich an die Kreisgeschäftsstelle über Mattermost.</div>
+      <!-- <div class="cover-footer-badge">Intern</div> -->
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 2: Abschnitte 1 + 2
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 2 / 8</span>
+    </div>
+
+    <!-- 1. Was ist die App? -->
+    <div class="section-divider">
+      <span class="section-divider-num">01</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Was ist die App?</h2>
+
+    <p>
+      Die <strong>Aktionskoordination</strong> ist das Online-Tool des Kreisverbands Berlin-Mitte zur Verwaltung von
+      Wahlkampfaktionen. Als Wahlkampfexperte hast du Zugang zu deinen eigenen Team-Aktionen.
+    </p>
+
+    <p><strong>Mit der App kannst du:</strong></p>
+    <ul class="bullet-list">
+      <li>Wahlkampfaktionen anlegen und verwalten</li>
+      <li>Freiwillige, die sich über die öffentliche Seite angemeldet haben, einsehen</li>
+      <li>Aktionen absagen und alle Angemeldeten automatisch benachrichtigen lassen</li>
+    </ul>
+
+    <div class="info-box">
+      <div class="info-label">Deine Rolle</div>
+      <p>Du hast die Rolle <strong>Wahlkampfexperte</strong> und siehst nur die Aktionen deines eigenen Teams.</p>
+    </div>
+
+    <!-- 2. Anmelden -->
+    <div class="section-divider">
+      <span class="section-divider-num">02</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Anmelden (Login)</h2>
+
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">Öffne die App in deinem Browser.</span></li>
+      <li><span class="step-num">2</span><span class="step-text">Klicke auf <strong>Login</strong> oder rufe direkt
+          <code>/login</code> auf.</span></li>
+      <li><span class="step-num">3</span><span class="step-text">Gib deine <strong>E-Mail-Adresse</strong> und dein
+          <strong>Passwort</strong> ein.</span></li>
+      <li><span class="step-num">4</span><span class="step-text">Nach erfolgreicher Anmeldung wirst du zum Dashboard
+          weitergeleitet.</span></li>
+    </ol>
+
+    <div class="info-box">
+      <div class="info-label">Tipp</div>
+      <p>Wenn Du Dein Passwort vergessen hast, wende Dich an die Kreisgeschäftsstelle.</p>
+    </div>
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">2</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 3: Abschnitt 3 – Dashboard
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 3 / 8</span>
+    </div>
+
+    <!-- 3. Dashboard -->
+    <div class="section-divider">
+      <span class="section-divider-num">03</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Dashboard-Übersicht</h2>
+
+    <p>Nach dem Login siehst du das Dashboard unter dem Menüpunkt <strong>Übersicht</strong>. Dort findest du alle
+      Aktionen deines Teams:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Feld</th>
+          <th>Bedeutung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Titel</strong></td>
+          <td>Name der Aktion</td>
+        </tr>
+        <tr>
+          <td><strong>Status</strong></td>
+          <td>
+            <span class="badge badge-aktiv">Aktiv</span>&nbsp;
+            <span class="badge badge-changed">Geändert</span>&nbsp;
+            <span class="badge badge-absage">Abgesagt</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Datum &amp; Uhrzeit</strong></td>
+          <td>Wann findet die Aktion statt</td>
+        </tr>
+        <tr>
+          <td><strong>Adresse</strong></td>
+          <td>Wo findet sie statt</td>
+        </tr>
+        <tr>
+          <td><strong>Team</strong></td>
+          <td>Welches Team ist zuständig</td>
+        </tr>
+        <tr>
+          <td><strong>Anmeldungen</strong></td>
+          <td>Anzahl angemeldeter Freiwilliger (/ max. Plätze)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Zu jeder Aktion gibt es drei Schaltflächen:</p>
+    <ul class="bullet-list">
+      <li><strong>Anmeldungen</strong> – öffnet die Liste der angemeldeten Freiwilligen</li>
+      <li><strong>Bearbeiten</strong> – öffnet das Formular zum Bearbeiten der Aktion</li>
+      <li><strong>Absagen</strong> – sagt die Aktion ab und benachrichtigt alle Angemeldeten (nur bei aktiven Aktionen
+        sichtbar)</li>
+    </ul>
+    <p>Oben rechts befindet sich die Schaltfläche <strong>Neue Aktion</strong>.</p>
+
+    <!-- 4. Neue Aktion -->
+    <div class="section-divider">
+      <span class="section-divider-num">04</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Neue Aktion anlegen</h2>
+
+    <p>Klicke im Dashboard oben rechts auf <strong>Neue Aktion</strong>. Es öffnet sich eine Seite mit zwei Optionen:
+    </p>
+
+    <ul class="bullet-list">
+      <li><strong>Manuell anlegen</strong> – eine einzelne Aktion über ein Formular eingeben</li>
+      <li><strong>Excel-Import</strong> – mehrere Aktionen auf einmal über eine Excel-Datei hochladen</li>
+    </ul>
+
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">3</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 3: Abschnitt 4 – Neue Aktion (manuell)
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 4 / 8</span>
+    </div>
+
+
+    <!-- 4.1 -->
+    <h3>4.1 Manuell anlegen</h3>
+    <p>Fülle das Formular aus:</p>
+
+    <h4>Allgemeine Angaben</h4>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Feld</th>
+          <th>Pflichtfeld</th>
+          <th>Hinweis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Titel</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>z.B. „Infostand Alexanderplatz"</td>
+        </tr>
+        <tr>
+          <td><strong>Datum</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Datum der Aktion</td>
+        </tr>
+        <tr>
+          <td><strong>Startzeit</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Uhrzeit Beginn</td>
+        </tr>
+        <tr>
+          <td><strong>Endzeit</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Uhrzeit Ende</td>
+        </tr>
+        <tr>
+          <td><strong>Adresse</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Vollständige Adresse inkl. PLZ, z.B. „Karl-Marx-Allee 1, 10178 Berlin" – wird automatisch auf der Karte
+            verortet</td>
+        </tr>
+        <tr>
+          <td><strong>Wahlkreis</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Aus der Dropdown-Liste wählen</td>
+        </tr>
+        <tr>
+          <td><strong>Team</strong></td>
+          <td><span class="req-cond">Bedingt</span></td>
+          <td>Nur wenn du mehreren Teams angehörst</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Ansprechperson</h4>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Feld</th>
+          <th>Pflichtfeld</th>
+          <th>Hinweis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Name</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Name der Ansprechperson vor Ort</td>
+        </tr>
+        <tr>
+          <td><strong>E-Mail</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Kontakt-E-Mail</td>
+        </tr>
+        <tr>
+          <td><strong>Telefon</strong></td>
+          <td><span class="req-yes">Ja</span></td>
+          <td>Handynummer der Ansprechperson</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Weitere Einstellungen</h4>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Feld</th>
+          <th>Pflichtfeld</th>
+          <th>Hinweis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Max. Teilnehmer</strong></td>
+          <td><span class="req-no">Nein</span></td>
+          <td>Leer lassen = unbegrenzte Plätze</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Klicke abschließend auf <strong>Aktion erstellen</strong>. Du wirst zurück zum Dashboard weitergeleitet.</p>
+
+    <!-- 4.2 -->
+    <h3>4.2 Per Excel importieren</h3>
+    <p>Mit dem Excel-Import kannst du mehrere Aktionen auf einmal anlegen.</p>
+
+    <ol class="steps">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">
+          <strong>Vorlage herunterladen</strong><br>
+          Klicke auf den Link <strong>Vorlage herunterladen</strong> oben auf der Import-Seite. Du bekommst eine
+          Excel-Datei mit den richtigen Spalten.
+        </span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">
+          <strong>Vorlage ausfüllen</strong><br>
+          Fülle die Vorlage mit deinen Aktionen aus. Jede Zeile ist eine Aktion. Pflichtfelder müssen ausgefüllt sein.
+        </span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">
+          <strong>Datei hochladen</strong><br>
+          Ziehe die fertige Excel-Datei in den gestrichelten Bereich, oder klicke auf <strong>Datei wählen</strong>.
+        </span>
+      </li>
+    </ol>
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">4</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 5: 4.2 Excel-Import + 5. Bearbeiten
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 5 / 8</span>
+    </div>
+
+    <ol class="steps">
+
+      <li>
+        <span class="step-num">4</span>
+        <span class="step-text">
+          <strong>Vorschau prüfen</strong><br>
+          Nach dem Hochladen siehst du eine Vorschau aller Zeilen:
+          <div class="spacer"></div>
+          <div class="status-row">
+            <span class="status-item">
+              <span class="status-dot dot-green"></span>
+              <strong>Grün / OK</strong> – Zeile ist gültig und wird importiert
+            </span>
+            <span class="status-item">
+              <span class="status-dot dot-red"></span>
+              <strong>Rot / Fehler</strong> – Etwas fehlt oder ist falsch; in der Spalte „Fehler" steht was zu
+              korrigieren ist
+            </span>
+          </div>
+        </span>
+      </li>
+      <li>
+        <span class="step-num">5</span>
+        <span class="step-text">
+          <strong>Importieren</strong><br>
+          Klicke auf <strong>X Aktionen importieren</strong>. Nur gültige Zeilen werden übernommen. Fehlerhafte Zeilen
+          werden übersprungen – du kannst die Excel-Datei korrigieren und erneut hochladen.
+        </span>
+      </li>
+    </ol>
+
+    <div class="info-box">
+      <div class="info-label">Hinweis</div>
+      <p>Wenn du mehreren Teams angehörst, musst du vor dem Import ein Team auswählen.</p>
+    </div>
+
+    <!-- 5. Bearbeiten -->
+    <div class="section-divider">
+      <span class="section-divider-num">05</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Aktion bearbeiten</h2>
+
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">Klicke im Dashboard bei der gewünschten Aktion auf
+          <strong>Bearbeiten</strong>.</span></li>
+      <li><span class="step-num">2</span><span class="step-text">Ändere die gewünschten Felder (dieselben Felder wie
+          beim Erstellen).</span></li>
+      <li><span class="step-num">3</span><span class="step-text">Klicke auf <strong>Speichern</strong>.</span></li>
+    </ol>
+
+    <div class="warning-box">
+      <div class="info-label">Wichtig</div>
+      <p>Wenn du eine Aktion änderst, erhalten alle bereits angemeldeten Freiwilligen automatisch eine
+        <strong>Änderungs-E-Mail</strong> mit den neuen Details. Der Status der Aktion wechselt auf <span
+          class="badge badge-changed">Geändert</span>.
+      </p>
+    </div>
+
+    <!-- 6. Absagen / Löschen -->
+    <div class="section-divider">
+      <span class="section-divider-num">06</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Aktion absagen oder löschen</h2>
+
+    <h3>Aktion absagen</h3>
+
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">Klicke im Dashboard bei der gewünschten Aktion auf
+          <strong>Absagen</strong> (roter Button).</span></li>
+      <li><span class="step-num">2</span><span class="step-text">Bestätige die Sicherheitsabfrage.</span></li>
+    </ol>
+
+    <p><strong>Was passiert danach:</strong></p>
+    <ul class="bullet-list">
+      <li>Der Status der Aktion wechselt auf <span class="badge badge-absage">Abgesagt</span></li>
+      <li>Alle angemeldeten Freiwilligen erhalten automatisch eine <strong>Absage-E-Mail</strong></li>
+      <li>Die Aktion bleibt im Dashboard sichtbar, kann aber nicht erneut aktiviert werden</li>
+      <li>Der <strong>Absagen</strong>-Button verschwindet (abgesagte Aktionen können nicht nochmals abgesagt werden)
+      </li>
+    </ul>
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">5</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 6: 6. Absagen
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 6 / 8</span>
+    </div>
+
+
+
+    <div class="danger-box">
+      <div class="info-label">Achtung</div>
+      <p>Eine Absage kann <strong>nicht rückgängig gemacht</strong> werden.</p>
+    </div>
+
+    <h3>Aktion löschen</h3>
+    <p>Eine abgesagte Aktion kann dauerhaft gelöscht werden. Wende dich dafür an die Administration – nur Admins können
+      Aktionen endgültig löschen.</p>
+
+    <!-- 7. Anmeldungen -->
+    <div class="section-divider">
+      <span class="section-divider-num">07</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Anmeldungen einsehen</h2>
+
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">Klicke im Dashboard bei der gewünschten Aktion auf
+          <strong>Anmeldungen</strong>.</span></li>
+      <li><span class="step-num">2</span><span class="step-text">Du siehst eine Tabelle mit allen angemeldeten
+          Freiwilligen:</span></li>
+    </ol>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Spalte</th>
+          <th>Inhalt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Name</strong></td>
+          <td>Vor- und Nachname</td>
+        </tr>
+        <tr>
+          <td><strong>E-Mail</strong></td>
+          <td>E-Mail-Adresse</td>
+        </tr>
+        <tr>
+          <td><strong>Telefon</strong></td>
+          <td>Handynummer (wenn angegeben)</td>
+        </tr>
+        <tr>
+          <td><strong>Signal</strong></td>
+          <td>Signal-Benutzername (wenn angegeben)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Einzelne Anmeldung löschen</h3>
+    <p>Klicke in der Zeile der betreffenden Person auf <strong>Löschen</strong> und bestätige. Die Anmeldung wird
+      unwiderruflich gelöscht.</p>
+
+    <div class="info-box">
+      <div class="info-label">Hinweis</div>
+      <p>Beim Löschen einer Anmeldung wird <strong>keine E-Mail</strong> an die Person verschickt.</p>
+    </div>
+
+    <!-- 8. Exportieren -->
+    <div class="section-divider">
+      <span class="section-divider-num">08</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Aktionen exportieren</h2>
+
+    <p>Im Dashboard (oben rechts) gibt es zwei Export-Möglichkeiten:</p>
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">"Excel exportieren" zur Auswertung</span></li>
+      <li><span class="step-num">2</span><span class="step-text">"Signal-Text" zur Bewerbung der Aktionen in
+          Chatgruppen.</span></li>
+    </ol>
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">6</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 7: 9. Öffentliche Seite + 10. E-Mails
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 7 / 8</span>
+    </div>
+
+    <!-- 9. Öffentliche Seite -->
+    <div class="section-divider">
+      <span class="section-divider-num">09</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Öffentliche Aktionsseite</h2>
+
+    <p>
+      Die öffentliche Seite ist für alle zugänglich – <strong>ohne Login</strong>. Sie zeigt alle aktiven Aktionen und
+      ermöglicht es Freiwilligen, sich anzumelden.
+    </p>
+
+    <h3>Was Freiwillige sehen</h3>
+    <ul class="bullet-list">
+      <li>Eine <strong>Liste</strong> oder <strong>Kartenansicht</strong> aller aktiven Aktionen</li>
+      <li>Filtermöglichkeiten nach Wahlkreis, Datum und Tageszeit</li>
+      <li>Für jede Aktion: Titel, Datum, Uhrzeit, Adresse, Ansprechperson, Anzahl freier Plätze</li>
+    </ul>
+
+    <h3>So melden sich Freiwillige an</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span><span class="step-text">Sie wählen eine oder mehrere Aktionen per Checkbox
+          aus.</span></li>
+      <li><span class="step-num">2</span><span class="step-text">Ein Button erscheint am unteren Bildschirmrand zur
+          Weiterleitung auf das Anmeldeformular</span></li>
+      <li><span class="step-num">3</span><span class="step-text">Im Anmeldeformular geben sie Name, E-Mail und
+          mindestens eine Kontaktmöglichkeit (Telefon oder Signal) an.</span></li>
+      <li><span class="step-num">4</span><span class="step-text">Sie bestätigen die Datenschutzerklärung und klicken auf
+          <strong>Jetzt anmelden</strong>.</span></li>
+      <li><span class="step-num">5</span><span class="step-text">Sie erhalten eine Bestätigungs-E-Mail.</span></li>
+    </ol>
+
+    <div class="info-box">
+      <div class="info-label">Hinweis</div>
+      <p>Eine Person kann sich <strong>nicht zweimal</strong> für dieselbe Aktion anmelden – gleiche E-Mail-Adresse wird
+        abgelehnt.</p>
+    </div>
+
+    <!-- 10. Automatische E-Mails -->
+    <div class="section-divider">
+      <span class="section-divider-num">10</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Automatische E-Mails</h2>
+
+    <p>Die App versendet folgende E-Mails automatisch – du musst nichts manuell tun:</p>
+
+    <table class="email-table">
+      <thead>
+        <tr>
+          <th>Auslöser</th>
+          <th>Empfänger</th>
+          <th>Inhalt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Neue Anmeldung</strong></td>
+          <td>Freiwillige/r</td>
+          <td>Bestätigung mit Aktionsdetails und Kontaktdaten</td>
+        </tr>
+        <tr>
+          <td><strong>Aktion geändert</strong></td>
+          <td>Alle Angemeldeten der Aktion</td>
+          <td>Benachrichtigung mit aktualisierten Daten</td>
+        </tr>
+        <tr>
+          <td><strong>Am Abend vor der Aktion</strong></td>
+          <td>Alle Angemeldeten der Aktion</td>
+          <td>Erinnerung mit Aktionsdetails</td>
+        </tr>
+        <tr>
+          <td><strong>Aktion abgesagt</strong></td>
+          <td>Alle Angemeldeten der Aktion</td>
+          <td>Absage-Benachrichtigung</td>
+        </tr>
+        <tr>
+          <td><strong>Täglich (abends)</strong></td>
+          <td>Du als Wahlkampfexperte</td>
+          <td>Tagesübersicht: Anmeldungen des Tages für deine Aktionen</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">7</span>
+    </div>
+  </div>
+
+
+  <!-- ================================================================
+     SEITE 8: 11. Häufige Fragen
+     ================================================================ -->
+  <div class="page content-page">
+    <div class="page-header">
+      <span class="page-header-title">Aktionskoordination · Anleitung Wahlkampfexperten</span>
+      <span class="page-header-num">Seite 8 / 8</span>
+    </div>
+
+    <!-- 11. FAQ -->
+    <div class="section-divider">
+      <span class="section-divider-num">11</span>
+      <span class="section-divider-line"></span>
+    </div>
+    <h2 class="section-heading">Häufige Fragen</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Was ist ein Signal-Name?</span>
+      </div>
+      <div class="faq-a">
+        <p>Signal ist ein Messenger-Dienst. Nutzer können optional einen Benutzernamen vergeben (Format:
+          <code>name.123</code>). Dieser kann genutzt werden, um über Signal Kontakt aufzunehmen, ohne die Telefonnummer
+          zu kennen.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Warum kann sich jemand nicht anmelden?</span>
+      </div>
+      <div class="faq-a">
+        <p><strong>Mögliche Gründe:</strong></p>
+        <ul class="bullet-list" style="margin-top:1.5mm; margin-bottom:0;">
+          <li>Die Aktion ist bereits abgesagt.</li>
+          <li>Die Person hat sich mit dieser E-Mail-Adresse bereits für diese Aktion angemeldet (Duplikate werden
+            verhindert).</li>
+          <li>Pflichtfelder wurden nicht ausgefüllt (Name, E-Mail und mindestens eine Kontaktmöglichkeit).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Warum sehe ich nicht alle Aktionen im Dashboard?</span>
+      </div>
+      <div class="faq-a">
+        <p>Als Wahlkampfexperte siehst du nur die Aktionen deines eigenen Teams.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Meine Adresse wird auf der Karte falsch angezeigt – was tun?</span>
+      </div>
+      <div class="faq-a">
+        <p>Die App ermittelt die Kartenposition automatisch aus der eingegebenen Adresse. Achte darauf, eine
+          vollständige und korrekte Adresse einzugeben, inkl. Hausnummer und Postleitzahl (z.B. „Karl-Marx-Allee 1,
+          10178 Berlin").</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Was passiert, wenn ich eine Aktion absage?</span>
+      </div>
+      <div class="faq-a">
+        <p>Alle angemeldeten Freiwilligen erhalten sofort eine Absage-E-Mail. Die Aktion bleibt als <span
+            class="badge badge-absage">Abgesagt</span> im Dashboard sichtbar und kann nicht rückgängig gemacht werden.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="faq-q-mark">?</span>
+        <span>Wo finde ich die Datenschutzerklärung?</span>
+      </div>
+      <div class="faq-a">
+        <p>Die Datenschutzerklärung ist auf der öffentlichen Seite unter <strong>Datenschutz</strong> zu finden.</p>
+      </div>
+    </div>
+
+    <div class="spacer-lg"></div>
+
+
+
+    <div class="page-footer">
+      <span class="page-footer-text">BÜNDNIS 90/DIE GRÜNEN Berlin-Mitte · Aktionskoordination</span>
+      <span class="page-footer-num">8</span>
+    </div>
+  </div>
+
+</body>
+
+</html>
