@@ -24,6 +24,7 @@ Ermöglicht die Verwaltung von Wahlkampfaktionen, Freiwilligen-Anmeldungen, Exce
 - **Admin-Bereich** für Benutzer-, Team- und Wahlkreis-Verwaltung mit Statistik-Dashboard
 - **E-Mail-System** via SMTP (Bestätigung, Änderung, Absage, tägliche Übersicht)
 - **Export** als Excel oder Signal-Textformat
+- **Iframe-Einbettung** einzelner Anmeldeformulare auf externen Websites via `/embed/aktion/[id]`
 - **Cron-Jobs:** Tägliche Übersichts-E-Mail, Erinnerungs-E-Mails an Angemeldete (Abend vor der Aktion) und automatische Löschung von Anmeldedaten nach 72 Stunden
 
 ---
@@ -192,6 +193,7 @@ Die ausführliche Deployment-Anleitung (Hetzner Cloud, Nginx, SSL, Cron-Jobs, Ba
 | `EMAIL_FROM`      | Absender-Adresse für E-Mails                  | `aktionen@gruene-mitte.de`                      |
 | `EMAIL_FROM_NAME` | Anzeigename des Absenders                     | `"Kreisvorstand B90/GRÜNE Berlin-Mitte"`        |
 | `CRON_SECRET`     | Bearer-Token für Cron-API-Endpunkte           | `openssl rand -hex 16`                          |
+| `ALLOWED_EMBED_DOMAIN` | Erlaubte Domain für Iframe-Einbettung (CSP `frame-ancestors`) | `https://www.gruene-mitte.de` |
 
 ### Kreisverbands-Konfiguration
 
@@ -272,6 +274,46 @@ Alle folgenden Variablen sind **optional** — ohne Angabe werden die Berlin-Mit
 
 ---
 
+## Iframe-Einbettung
+
+Einzelne Aktions-Anmeldeformulare können direkt in externe Websites eingebettet werden.
+
+**URL-Schema:** `https://<app-domain>/embed/aktion/<aktionId>`
+
+### Einbettungs-Code
+
+```html
+<iframe
+  id="grn-aktion"
+  src="https://<app-domain>/embed/aktion/<aktionId>"
+  width="100%"
+  height="600"
+  style="border:0;"
+></iframe>
+<script>
+  window.addEventListener('message', (e) => {
+    if (e.origin !== 'https://<app-domain>') return;
+    if (e.data?.type === 'grn-actions-resize') {
+      document.getElementById('grn-aktion').style.height = e.data.height + 'px';
+    }
+  });
+</script>
+```
+
+Das Script passt die iframe-Höhe automatisch an den Formularinhalt an (z.B. nach Absenden oder bei Fehlermeldungen). Die Aktions-ID ist im Dashboard bei jeder Aktion einsehbar.
+
+### Konfiguration
+
+In der `.env` die erlaubte Einbettungsdomäne setzen:
+
+```env
+ALLOWED_EMBED_DOMAIN=https://www.gruene-mitte.de
+```
+
+Ohne diese Variable ist Einbettung nur von `'self'` erlaubt (d.h. nur von der App-Domain selbst). Mit gesetzter Variable erlaubt der CSP-Header `frame-ancestors 'self' https://www.gruene-mitte.de` — alle anderen Domains werden vom Browser blockiert.
+
+---
+
 ## Projektstruktur
 
 ```
@@ -291,6 +333,7 @@ Alle folgenden Variablen sind **optional** — ohne Angabe werden die Berlin-Mit
 │   │   └── security/            # Auth-, Rollen- und Sicherheitstests
 │   ├── app/
 │   │   ├── (auth)/              # Login-Seite
+│   │   ├── embed/               # Einbettbare Anmeldeformulare (iframe)
 │   │   ├── (public)/            # Öffentliche Seiten (Übersicht, Anmeldung, Abmeldung, Datenschutz)
 │   │   ├── admin/               # Admin-Bereich (Nutzer, Teams, Statistiken)
 │   │   ├── dashboard/           # Expert-Dashboard (Aktionen-Verwaltung)

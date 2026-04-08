@@ -22,6 +22,24 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+// Rate limiting: 2 requests per 15 minutes per email address
+const emailRateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const EMAIL_RATE_LIMIT = 2;
+const EMAIL_RATE_WINDOW = 15 * 60 * 1000;
+
+function isEmailRateLimited(email: string): boolean {
+  const now = Date.now();
+  const entry = emailRateLimitMap.get(email);
+
+  if (!entry || now > entry.resetAt) {
+    emailRateLimitMap.set(email, { count: 1, resetAt: now + EMAIL_RATE_WINDOW });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > EMAIL_RATE_LIMIT;
+}
+
 export async function GET(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
   if (isRateLimited(ip)) {
@@ -37,6 +55,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Ungültige E-Mail-Adresse" }, { status: 400 });
   }
   const email = parsed.data;
+
+  if (isEmailRateLimited(email)) {
+    return NextResponse.json(
+      { error: "Zu viele Anfragen für diese E-Mail-Adresse. Bitte versuche es später erneut." },
+      { status: 429 }
+    );
+  }
 
   try {
     const anmeldungen = await prisma.anmeldung.findMany({
